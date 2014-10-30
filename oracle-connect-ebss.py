@@ -2,10 +2,34 @@ import cx_Oracle
 import sys
 from datetime import date
 
+def convertToGMT(hour):
+	print 'hour', hour
+	### Convert to Integer to do math
+	hour = int(hour) + 5
+	print hour
+
+	### If hour is over 24, roll back using modulus
+	if hour > 24:
+		print hour, 'is greater than 24'
+		hour = hour % 24
+		hour = '0' + str(hour)
+		#print hour
+
+	print 'GMT', hour
+	
+	### Convert back to string
+	hour = str(hour)
+
+	### because we lose the leading 0 when we convert to INT above ###
+	if len(hour) == 1:
+		hour = '0' + hour
+		print 'Padded Hour with 0'
+	return hour
+
 def convertDate(incoming_date):
 	#Convert Oracle_Datetime (2006, 10, 25, 20, 24, 8) to yymmddhhmmss  GMT
 	#print incoming_date.strftime("%d, %m, %y, %H, %M, %S")
-	string_date = incoming_date.strftime("%d, %m, %y, %H, %M, %S")
+	string_date = incoming_date.strftime("%d, %m, %Y, %H, %M, %S")
 	day, month, year, hour, minute, second = string_date.split(',')
 	day = day.strip()
 	year = year.strip()
@@ -13,9 +37,9 @@ def convertDate(incoming_date):
 	second = second.strip()
 	minute = minute.strip()
 	hour = hour.strip()
+	hour = convertToGMT(hour)
 	newdate = year+month+day+hour+minute+second
 	newdate = newdate.strip()
-	#print newdate
 	return newdate
 
 def main():
@@ -63,9 +87,11 @@ def main():
 			oracle_title = ''
 
 			######## Run Query ############
-			#cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS")
+			cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS")
 			#cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS WHERE USER_ID = 'RENNOC' and LAST_UPDATE_DATETIME >= '25-OCT-06'")
-			cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS WHERE LAST_UPDATE_DATETIME >= '25-OCT-06'")
+			
+			#cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS WHERE LAST_UPDATE_DATETIME >= '25-OCT-06'")
+			
 			#cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS WHERE USER_ID = 'RENNOC' or USER_ID = 'elephant' or USER_ID = 'SGREENE'") 
 			#cursor.execute("SELECT * FROM D5768PGM.V_EBSS_VSTR_DTLS WHERE USER_ID = 'RENNOC' or USER_ID = 'elephant' or USER_ID = 'SGREENE' or USER_ID = 'DRCOCOA'")	
 			## Always returns 30 columns in the same order #######
@@ -92,7 +118,7 @@ def main():
 				oracle_birthDate = result[5]
 				oracle_gender = result[6]
 				oracle_email_address = result[7]   # Not Specified
-				oracle_customerCode_id = result[8] # not
+				oracle_customerCode_id = result[8] 
 				oracle_customerType = result[9]
 				oracle_userSpecialtyID = result[10]
 				oracle_userSpecialty = result[11]
@@ -121,8 +147,10 @@ def main():
 				##### Convert Datetime to custom date format #######
 				if oracle_registrationDate is not None:
 					oracle_registrationDate = convertDate(oracle_registrationDate)
+					print 'oracle_registrationDate:', oracle_registrationDate
 				if oracle_latestUpdate is not None:
 					oracle_latestUpdate = convertDate(oracle_latestUpdate)
+					print 'oracle_latestUpdate:', oracle_latestUpdate
 	 			
 				if  oracle_birthDate is not None:
 					#print oracle_birthDate, type(oracle_birthDate)
@@ -134,12 +162,12 @@ def main():
 					oracle_title = ''
 				if oracle_latestUpdate is None:
 					oracle_latestUpdate = ''
-				if oracle_customerCode_id is None:
-					oracle_customerCode_id = ''
+				if oracle_customerType is None:
+					oracle_customerType = ''
 				if oracle_registrationDate is None:
 					oracle_registrationDate = ''	
-				if oracle_userSpecialtyID is None:
-					oracle_userSpecialtyID = ''	
+				if oracle_userSpecialty is None:
+					oracle_userSpecialty = ''	
 				if oracle_validationStatus is None:
 					oracle_validationStatus = ''
 				if oracle_addressComplement is None:
@@ -164,10 +192,12 @@ def main():
 				try:
 					print 'writing user:', i	
 						
-					foutput.write(oracle_userName + "|" +  oracle_firstName +  "|" + oracle_lastName + "|" + oracle_title + "|" + oracle_customerCode_id +  "|" + oracle_registrationDate \
-					+ "|" + oracle_latestUpdate  + "|" + oracle_userSpecialtyID  +  "|" + oracle_validationStatus  +  "|" + oracle_addressComplement +  "|" \
+					foutput.write(oracle_userName + "|" +  oracle_firstName +  "|" + oracle_lastName + "|" + oracle_title + "|" + oracle_customerType +  "|" + oracle_registrationDate \
+					+ "|" + oracle_latestUpdate  + "|" + oracle_userSpecialty  +  "|" + oracle_validationStatus  +  "|" + oracle_addressComplement +  "|" \
 					+  oracle_addressLine1  +  "|" + oracle_addressLine2  +  "|" + oracle_birthDate +  "|" + oracle_city + "|" + oracle_gender + "|" \
 					+ oracle_postalCode + '\n')
+
+					print 'Done with', i
 					
 				except:
 					print - 'Failed to write', oracle_userName, 'to file'

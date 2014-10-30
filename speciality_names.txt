@@ -1,0 +1,54 @@
+Allergy
+Allergy and Immunology
+Critical Care Medicine-IM
+Emergency Medicine
+Endocrinology
+Family Medicine
+General Practice
+NA
+Gastroenterology
+Hematology-IM
+Immunology
+Infectious Diseases/Internal MED
+Addiction Medicine
+Internal Medicine
+Internal Medicine, Geriatrics
+Medical Genetics
+Neonatology
+Nephrology
+Neurology
+Neurological Surgery
+Gynecology
+Maternal and Fetal Medicine
+Obstetrics and Gynecology
+Occupational Medicine
+Hematology and Oncology
+Oncology, Medical
+Ophthalmology
+Optometry
+Orthopedics/Orthopedic Surgery
+Other
+Otolaryngology
+Pathology, Anatomic/Clinical
+Pediatrics
+Pediatrics, Adolescent Medicine
+Anesthesiology
+Physical Medicine and REHAB
+Plastic and Reconstructive Surgery
+Pain Medicine
+General Preventive Medicine
+Public Health
+Psychiatry
+Pulmonary Disease
+Cardiology
+Radiology
+Rheumatology
+Sports Medicine
+Surgery, Cardiovascular
+Surgery, General
+Urology
+Surgery, Vascular
+Clinical Pharmacology
+Family Practice, Geriatric Medicine
+Hepatology
+Dermatology
